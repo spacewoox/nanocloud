@@ -10,6 +10,7 @@
 		        {{nano-input placeholder='Email address' model=model valuePath="email"}}
 		        {{nano-input placeholder='Password' type="password" model=model valuePath="password"}}
 		        {{nano-input placeholder='Password confirmation' type="password" value=passwordConfirmation}}
+		        {{nano-input placeholder='Team (optional)' type="text" model=model value="team"}}
 
             <button {{ action "submitForm" }} type="submit" class="btn btn-primary btn-block text-uppercase {{ if loadState 'loadState' }}">
               <span class='text'>Sign Up</span>

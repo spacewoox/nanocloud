@@ -63,6 +63,10 @@ Router.map(function() {
       this.route('other-setting');
       this.route('look-and-feel');
     });
+    this.route('teams', function() {
+      this.route('team');
+      this.route('new');
+    });
   });
 
   this.route('login');

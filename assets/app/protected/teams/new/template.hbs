@@ -1,0 +1,19 @@
+<div class="m-t-2">
+  <h4>
+    {{#link-to 'protected.teams' }}Teams{{/link-to}} - Create your team
+ </h4>
+  <div class="user-new content-wrapper form m-t-1">
+    <form {{action 'add' on='submit'}}>
+        {{nano-input placeholder='Team' model=model valuePath="team" autofocus=true }}
+
+        {{#if loadState}}
+          <button type="submit" class="btn btn-info btn-block text-uppercase">
+            Create
+            {{ fa-icon "spinner" spin=true}}
+          </button>
+        {{else}}
+          <button type="submit" class="btn btn-primary btn-block text-uppercase">Create</button>
+        {{/if}}
+    </form>
+  </div>
+</div>
