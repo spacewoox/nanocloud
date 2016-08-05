@@ -40,7 +40,7 @@ function initialize() {
         configs.owncloudAdminUsername + ":" +
         configs.owncloudAdminPassword + "@" +
         configs.owncloudURL + ":" +
-        configs.owncloudPort + "/owncloud/ocs/v1.php/cloud";
+        configs.owncloudPort + "/ocs/v1.php/cloud";
       return Promise.resolve(_owncloudURL);
     })
     .catch((err) => {
@@ -142,7 +142,7 @@ module.exports = {
    * @param {string} Owncloud account's username
    * @param {string} Owncloud account's group name
    */
-  revokeUserToGroup: function(username, groupname) {
+  assignUserToGroup: function(username, groupname) {
     let options = {
       url: _owncloudURL + "/users/" + username + "/groups",
       form: {
