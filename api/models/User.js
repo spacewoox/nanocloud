@@ -55,6 +55,9 @@ module.exports = {
     expirationDate: {
       type: 'integer'
     },
+    team: {
+      model: 'team'
+    },
 
     toJSON: function() {
       var obj = this.toObject();
