@@ -40,6 +40,12 @@ Storage specific:
 - STORAGE_PORT (mandatory, defaults to 9090) storage service's port
 - UPLOAD_LIMIT (defaults 0 (desactivated)) upload limit, in MB, for each user
 
+Owncloud specific:
+- OWNCLOUD_URL (mandatory, defaults to 'localhost') Owncloud service's IP
+- OWNCLOUD_PORT (mandatory, defaults to 8082) Owncloud service's Port
+- OWNCLOUD_ADMIN_USERNAME (mandatory) Owncloud administrator username
+- OWNCLOUD_ADMIN_PASSWORD (mandatory) Owncloud administrator password
+
 Once loaded, Nanocloud will be accessible on **localhost**.
 
 # Run in developer mode
