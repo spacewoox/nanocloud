@@ -25,8 +25,9 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-  setupController() {
+  setupController(controller) {
     this.get('configuration').loadData();
+    controller.set('team', this.store.findAll('team'));
   },
 
   configuration: Ember.inject.service('configuration'),

@@ -85,6 +85,7 @@ export default DS.Model.extend(Validations, {
   password: DS.attr('string'),
   signupDate: DS.attr('number'),
   expirationDays: DS.attr('string'),
+  team: DS.attr('string'),
 
   fullName: function() {
     if (this.get('firstName') && this.get('lastName')) {

@@ -25,11 +25,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-/* globals ConfigService */
-/* globals EmailService */
-/* globals PendingUser */
-/* globals JsonApiService */
-/* globals User */
+/* globals ConfigService, EmailService, PendingUser, JsonApiService, User */
 
 const uuid = require('node-uuid');
 

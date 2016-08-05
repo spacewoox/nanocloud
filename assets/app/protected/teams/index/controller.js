@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
 
   store: Ember.inject.service('store'),
+  session: Ember.inject.service('session'),
   teamName: '',
   modelIsEmpty: Ember.computed.empty('items'),
   sortableTableConfig: {
@@ -60,7 +61,8 @@ export default Ember.Controller.extend({
     createTeam() {
 
       let record = this.get('store').createRecord('team', {
-        name : this.get('teamName')
+        idUser: this.get('session.user.id'),
+        name : this.get('teamName'),
       });
 
       record.save();

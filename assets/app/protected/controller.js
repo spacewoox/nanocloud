@@ -63,6 +63,10 @@ export default Ember.Controller.extend({
     return this.get('documentationUrl') + this.get('routeNameToDocumentationLink')[this.get('routeName')];
   }),
 
+  hasTeam: Ember.computed('team', function() {
+    return this.get('team').get('length') > 0 ? true : false;
+  }),
+
   actions: {
     toggleSidebar() {
       this.toggleProperty('showSidebar');

@@ -89,16 +89,14 @@
             </li>
           {{/if}}
 
-          {{#if session.user.isAdmin}}
-            <li>
-              {{#link-to 'protected.teams'}}
-                <span class="icon">
-                  <i class="material-icons">assignment_ind</i>
-                </span>
-                Team
-              {{/link-to}}
-            </li>
-          {{/if}}
+          <li>
+            {{#link-to 'protected.teams'}}
+              <span class="icon">
+                <i class="material-icons">assignment_ind</i>
+              </span>
+              Team
+            {{/link-to}}
+          </li>
 
           {{#if session.user.isAdmin}}
             <li>

@@ -15,6 +15,11 @@ module.exports = {
       index: true,
       uuidv4: true,
     },
+    id_user: {
+      type: 'string',
+      unique: true,
+      uuidv4: true,
+    },
     name: {
       type: 'string'
     },
