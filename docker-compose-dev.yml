@@ -74,6 +74,15 @@ services:
     network_mode: host
     container_name: "postgres"
 
+  owncloud:
+    image: nanocloud/owncloud
+    volumes:
+      - ./proxy/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./proxy/certificates:/etc/nginx/ssl/:ro
+    restart: always
+    network_mode: host
+    container_name: owncloud
+
 volumes:
   plaza:
     driver: local

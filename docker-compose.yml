@@ -90,6 +90,13 @@ services:
       - nanocloud
     restart: always
 
+  owncloud:
+    build: ./owncloud
+    image: nanocloud/owncloud
+    networks:
+      - nanocloud
+    restart: always
+
 networks:
   nanocloud:
     driver: bridge
