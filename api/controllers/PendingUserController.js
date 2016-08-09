@@ -35,7 +35,10 @@ const moment  = require('moment');
 module.exports = {
 
   create(req, res) {
-    var user = req.body.data.attributes;
+    const body = req.body;
+
+    var user = body.data.attributes;
+    const relationships = body.data.relationships;
 
     user.id = uuid.v4();
     user.isAdmin = false;
@@ -73,10 +76,26 @@ module.exports = {
       .then((message) => {
         return EmailService.sendMail(to, subject, message)
         .then(() => {
-          return PendingUser.create(JsonApiService.deserialize(user));
+          return PendingUser.create(JsonApiService.deserialize(user))
+          .then((createdUser) => {
+
+            if (relationships.team && relationships.team.data) {
+              return PendingUser.update(createdUser.id, {
+                team: relationships.team.data.id
+              })
+              .then(() => {
+                return createdUser;
+              });
+            }
+
+            return createdUser;
+          });
         })
-        .then((created_user) => {
-          return res.created(created_user);
+        .then((createdUser) => {
+          return PendingUser.findOne(createdUser.id)
+          .then((createdUser) => {
+            return res.created(createdUser);
+          });
         });
       });
     })

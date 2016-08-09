@@ -55,6 +55,9 @@ module.exports = {
     expirationDate: {
       type: 'integer'
     },
+    isTeamAdmin: {
+      type: 'boolean'
+    },
     team: {
       model: 'team'
     },

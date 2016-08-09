@@ -25,10 +25,36 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
+const uuid = require('node-uuid');
+
 module.exports = {
 
-  attributes: {
+  autoPK: false,
 
+  attributes: {
+    id: {
+      type: 'string',
+      primaryKey: true,
+      uuidv4: true,
+      defaultsTo() {
+        return uuid.v4();
+      }
+    },
+
+    name: {
+      type: 'string',
+      unique: true
+    },
+
+    members: {
+      collection: 'user',
+      via: 'team'
+    },
+
+    pendingMembers: {
+      collection: 'pendinguser',
+      via: 'team'
+    }
   }
 };
 

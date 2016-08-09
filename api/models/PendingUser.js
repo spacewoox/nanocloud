@@ -58,6 +58,14 @@ module.exports = {
     isAdmin: {
       type: 'boolean'
     },
+
+    isTeamAdmin: {
+      type: 'boolean'
+    },
+
+    team: {
+      model: 'team'
+    }
   },
 
   beforeCreate: function(values, next){
