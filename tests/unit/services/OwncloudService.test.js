@@ -26,33 +26,28 @@
 
 /* global ConfigService, OwncloudService */
 
-const expect = require('chai').expect;
-const username = "nanoUser";
-const groupname = "nanoGroup";
+const Promise = require('bluebird');
+const username = 'nanoUser';
+const groupname = 'nanoGroup';
 
-describe("OwncloudService", function() {
+describe('OwncloudService', function() {
 
   before(function(done) {
-    ConfigService.set("owncloudAdminUsername", "nanocloud")
+    return Promise.all([
+      ConfigService.set('owncloudAdminUsername', 'nanocloud'),
+      ConfigService.set('owncloudAdminPassword', 'Nanocloud123+'),
+      ConfigService.set('owncloudURL', 'localhost'),
+      ConfigService.set('owncloudPort', 8082),
+    ])
     .then(() => {
-      return ConfigService.set("owncloudAdminPassword", "Nanocloud123+");
-    })
-    .then(() => {
-      return ConfigService.set("owncloudURL", "localhost");
-    })
-    .then(() => {
-      return ConfigService.set("owncloudPort", "8082");
-    })
-    .then(() => {
-      OwncloudService.initialize();
-      return done();
+      done();
     });
   });
 
   describe('Create a user', function() {
     it('Should return success', (done) => {
       return OwncloudService.createUser(username)
-      .then((res) => {
+      .then(() => {
         done();
       });
     });
@@ -72,7 +67,7 @@ describe("OwncloudService", function() {
   describe('Grant user administration rights on a group', function() {
     it('Should return success', (done) => {
       return OwncloudService.grantGroupAdmin(username, groupname)
-      .then((res) => {
+      .then(() => {
         done();
       });
     });
@@ -81,7 +76,7 @@ describe("OwncloudService", function() {
   describe('Revoke user administration rights on a group', function() {
     it('Should return success', (done) => {
       return OwncloudService.revokeGroupAdmin(username, groupname)
-      .then((res) => {
+      .then(() => {
         done();
       });
     });
@@ -90,7 +85,7 @@ describe("OwncloudService", function() {
   describe('Assign user to a group', function() {
     it('Should return success', (done) => {
       return OwncloudService.assignUserToGroup(username, groupname)
-      .then((res) => {
+      .then(() => {
         done();
       });
     });
@@ -99,7 +94,7 @@ describe("OwncloudService", function() {
   describe('Remove user to from group', function() {
     it('Should return success', (done) => {
       return OwncloudService.removeUserFromGroup(username, groupname)
-      .then((res) => {
+      .then(() => {
         done();
       });
     });
@@ -108,7 +103,7 @@ describe("OwncloudService", function() {
   describe('Delete a group', function() {
     it('Should return success', (done) => {
       return OwncloudService.deleteGroup(groupname)
-      .then((res) => {
+      .then(() => {
         done();
       });
     });
@@ -117,7 +112,7 @@ describe("OwncloudService", function() {
   describe('Delete a user', function() {
     it('Should return success', (done) => {
       return OwncloudService.deleteUser(groupname)
-      .then((res) => {
+      .then(() => {
         done();
       });
     });
