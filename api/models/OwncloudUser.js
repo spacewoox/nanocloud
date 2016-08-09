@@ -16,62 +16,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General
- * Public License
- * along with this program.  If not, see
- * <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-const bcrypt = require('bcryptjs');
-const uuid = require('node-uuid');
 
 module.exports = {
 
   autoPK: false,
-  attributes: {
 
+  attributes: {
     id: {
       type: 'string',
       primaryKey: true,
-      unique: true,
-      index: true,
       uuidv4: true,
-      defaultsTo: function (){ return uuid.v4(); }
     },
 
-    firstName: {
+    password: {
       type: 'string'
-    },
-
-    lastName: {
-      type: 'string'
-    },
-
-    hashedPassword: {
-      type: 'string'
-    },
-
-    email: {
-      type: 'string'
-    },
-
-    isAdmin: {
-      type: 'boolean'
-    },
-
-    isTeamAdmin: {
-      type: 'boolean'
-    },
-
-    team: {
-      model: 'team'
     }
-  },
-
-  beforeCreate: function(values, next){
-    var hash = bcrypt.hashSync(values.password, 10);
-    values.hashedPassword = hash;
-    delete values.password;
-    next();
   }
 };
+
