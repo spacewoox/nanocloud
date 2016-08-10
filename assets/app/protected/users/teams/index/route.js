@@ -27,5 +27,12 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   setupController(controller, model) {
     controller.set('model', this.store.createRecord('team', {}));
+  },
+
+  actions: {
+    refreshModel() {
+      let teamController = this.controllerFor('protected.users.teams');
+      teamController.send('refreshTeamsData');
+    }
   }
 });

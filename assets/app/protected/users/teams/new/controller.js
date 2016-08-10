@@ -9,6 +9,7 @@ export default Ember.Controller.extend({
 		submitForm() {
       let model = this.get('model');
       this.set('loadState', 1);
+      console.log(this.get('session.user.team'));
       model.set('team', this.get('session.user.team'));
       model.save()
 			.then(() => {

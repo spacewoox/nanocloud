@@ -4,6 +4,7 @@ export default Ember.Controller.extend({
   teamController: Ember.inject.controller('protected.users.teams'),
   teams: Ember.computed.oneWay('teamController.teams'),
   hasTeam: Ember.computed.notEmpty('teams'),
+  session: Ember.inject.service('session'),
 
   sortableTableConfig: {
 
@@ -50,13 +51,14 @@ export default Ember.Controller.extend({
 
   actions: {
     createTeam() {
-      console.log('create a team');
       this.get('model').save()
-        .then(() => {
-          this.toast.success('everything is ok');
+        .then((team) => {
+          this.toast.success('Team has been created successfully');
+          this.get('session.user').set('team', team.get('id'));
+          this.send('refreshModel')
         })
         .catch(() => {
-          this.toast.error('An error occured');
+          this.toast.error('An error occured. Team has not been created');
         })
     }
   }
