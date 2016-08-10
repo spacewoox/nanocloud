@@ -24,22 +24,8 @@
 
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
-  applicationController: Ember.inject.controller('application'),
-  routeName: Ember.computed.oneWay('applicationController.currentRouteName'),
-
-  groupTab: Ember.computed('applicationController.currentRouteName', function() {
-    return (this.get('routeName').indexOf('protected.users.groups') === 0);
-  }),
-
-  teamTab: Ember.computed('applicationController.currentRouteName', function() {
-    return (this.get('routeName').indexOf('protected.users.teams') === 0);
-  }),
-
-  userTab: Ember.computed('groupTab', 'teamTab', function() {
-    return (
-      this.get('groupTab') === false &&
-      this.get('teamTab') === false
-    );
-  }),
+export default Ember.Route.extend({
+  setupController(controller, model) {
+    controller.set('model', this.store.createRecord('team', {}));
+  }
 });

@@ -29,12 +29,14 @@ export default Ember.Controller.extend({
   applicationController: Ember.inject.controller('application'),
   routeName: Ember.computed.alias('applicationController.currentRouteName'),
   connectionName: null,
+  teamModel: null,
 
   session: Ember.inject.service('session'),
   name: config.APP.name,
   version: config.APP.version,
 
   showSidebar: false,
+  teamModel: false,
 
   documentationUrl: "http://documentation.nanocloud.com/docs/",
   routeNameToDocumentationLink: {
@@ -64,6 +66,23 @@ export default Ember.Controller.extend({
   }),
 
   actions: {
+
+    closeModal() {
+      this.set('teamModal', false);
+    },
+
+    createTeam() {
+      let input = this.get('teamModel');
+      console.log('create a team in protected');
+      this.get('teamModel').save()
+        .then(() => {
+          this.toast.success('everything is ok');
+        })
+        .catch(() => {
+          this.toast.error('An error occured');
+        })
+    },
+
     toggleSidebar() {
       this.toggleProperty('showSidebar');
     },

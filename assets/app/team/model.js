@@ -2,5 +2,7 @@ import DS from 'ember-data';
 
 export default DS.Model.extend({
   name: DS.attr('string'),
-  members: DS.hasMany('user')
+  createdAt: DS.attr('number'),
+  updatedAt: DS.attr('number'),
+  members: DS.attr(),
 });
