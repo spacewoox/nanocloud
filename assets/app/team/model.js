@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 
 export default DS.Model.extend({
@@ -5,4 +6,17 @@ export default DS.Model.extend({
   createdAt: DS.attr('number'),
   updatedAt: DS.attr('number'),
   members: DS.attr(),
+  pendingMembers: DS.attr(),
+  allMembers: Ember.computed('members', 'pendingMembers', function() {
+    let user = Ember.A([]);
+    this.get('members').forEach((item) => {
+      item.isActivated = true;
+      user.pushObject(item);
+    });
+    this.get('pendingMembers').forEach((item) => {
+      item.isActivated = false;
+      user.pushObject(item);
+    });
+    return user;
+  }),///Ember.computed.union('members', 'pendingMembers'),
 });
