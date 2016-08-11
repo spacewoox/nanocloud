@@ -18,5 +18,5 @@ export default DS.Model.extend({
       user.pushObject(item);
     });
     return user;
-  }),///Ember.computed.union('members', 'pendingMembers'),
+  }),
 });

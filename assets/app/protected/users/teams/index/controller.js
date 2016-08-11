@@ -3,15 +3,14 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   teamController: Ember.inject.controller('protected.users.teams'),
   teams: Ember.computed.oneWay('teamController.teams'),
-  hasTeam: Ember.computed.notEmpty('teams'),
+  hasTeam: Ember.computed.notEmpty('session.user.team'),
   session: Ember.inject.service('session'),
 
   sortableTableConfig: {
 
     filteringIgnoreCase: true,
     messageConfig: {
-      searchLabel: "Bouya",
-      searchPlaceholder: "Search",
+      searchLabel: "Search",
     },
 
     customIcons: {

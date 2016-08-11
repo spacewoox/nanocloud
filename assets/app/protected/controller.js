@@ -26,17 +26,18 @@ import Ember from 'ember';
 import config from 'nanocloud/config/environment';
 
 export default Ember.Controller.extend({
+  session: Ember.inject.service('session'),
   applicationController: Ember.inject.controller('application'),
   routeName: Ember.computed.alias('applicationController.currentRouteName'),
   connectionName: null,
-  teamModel: null,
+  teamModal: false,
+  teamIsEmpty: Ember.computed.empty('session.user.team'),
+  showModal: Ember.computed.and('teamModal', 'teamIsEmpty'),
 
-  session: Ember.inject.service('session'),
   name: config.APP.name,
   version: config.APP.version,
 
   showSidebar: false,
-  teamModel: false,
 
   documentationUrl: "http://documentation.nanocloud.com/docs/",
   routeNameToDocumentationLink: {
@@ -73,13 +74,13 @@ export default Ember.Controller.extend({
 
     createTeam() {
       let input = this.get('teamModel');
-      console.log('create a team in protected');
       this.get('teamModel').save()
         .then(() => {
-          this.toast.success('everything is ok');
+          this.toast.success('Team has been created successfully');
+          this.send('closeModal');
         })
         .catch(() => {
-          this.toast.error('An error occured');
+          this.toast.error('An error occured. Team has not been created');
         })
     },
 

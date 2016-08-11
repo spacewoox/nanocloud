@@ -83,14 +83,14 @@ module.exports = {
       .populate('members')
       .populate('pendingMembers')
       .then((teams) => {
-        res.send(JsonApiService.serialize('teams', teams));
+        res.send(JsonApiService.serialize('teams', [teams]));
       });
       return;
     }
 
     Team.findOne(user.team)
     .then((teams) => {
-      res.send(JsonApiService.serialize('teams', teams));
+      res.send(JsonApiService.serialize('teams', [teams]));
     });
   }
 };

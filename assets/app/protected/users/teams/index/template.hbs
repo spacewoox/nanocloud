@@ -10,35 +10,12 @@
     </span>
   </p>
   <h4>
-<!--
-    {{#link-to 'protected.users.teams' }}Team {{team.name}}{{/link-to}}
--->
     {{#if hasTeam}}
       {{#link-to 'protected.users.teams.new' class='btn btn-primary pull-xs-right'}}Create a new user{{/link-to}}
     {{/if}}
   </h4>
   <div class='content-wrapper m-t-2'>
-    {{#if hasTeam}}
-      {{#each teams as |team|}}
-        <h4 class='m-t-1 m-b-1 color-primary'> Teams
-          <div class='in-bl va-tb'>
-            {{icon-component class="va-sub" materialIcon="navigate_next"}} {{team.name}}
-          </div>
-        </h4>
-        {{models-table
-          class="sortableTable"
-          data=team.allMembers
-          columns=columns
-          showColumnsDropdown=false
-          filteringIgnoreCase=sortableTableConfig.filteringIgnoreCase
-          customMessages=sortableTableConfig.messageConfig
-          customIcons=sortableTableConfig.customIcons
-          customClasses=sortableTableConfig.customClasses
-          useNumericPagination=true
-          multipleColumnsSorting=false
-        }}
-      {{/each}}
-    {{else}}
+    {{#unless hasTeam}}
       <p>
         Looks like you don't have a team yet. Let's create one
       </p>
@@ -55,7 +32,26 @@
           </button>
         </div>
       </div>
-    {{/if}}
+    {{/unless}}
+    {{#each teams as |team|}}
+      <h4 class='m-t-1 m-b-1 color-primary'> Teams
+        <div class='in-bl va-tb'>
+          {{icon-component class="va-sub" materialIcon="navigate_next"}} {{team.name}}
+        </div>
+      </h4>
+      {{models-table
+        class="sortableTable"
+        data=team.allMembers
+        columns=columns
+        showColumnsDropdown=false
+        filteringIgnoreCase=sortableTableConfig.filteringIgnoreCase
+        customMessages=sortableTableConfig.messageConfig
+        customIcons=sortableTableConfig.customIcons
+        customClasses=sortableTableConfig.customClasses
+        useNumericPagination=true
+        multipleColumnsSorting=false
+      }}
+    {{/each}}
     <div class="clearfix"></div>
   </div>
 </div>

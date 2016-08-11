@@ -152,7 +152,7 @@
     </nav>
     {{outlet}}
   </div>
-  {{#if teamModal}}
+  {{#if showModal}}
     {{#modal-dialog close="closeModal"
                     targetAttachment="center"
                     containerClassNames="modal-dialog"
@@ -163,14 +163,6 @@
           <div class="form-group row">
             <div class="col-sm-6">
               {{nano-input hideError=userHasSubmitted placeholder='Your team name' model=teamModel valuePath="name" autofocus=true }}
-<!--
-              {{input
-                class="form-control"
-                id="new-group-name"
-                placeholder="Your team name lool"
-                value=groupName
-                disabled=renaming}}
--->
             </div>
             <div class="col-sm-4">
               <button class="btn btn-primary" {{ action "createTeam" }}>
