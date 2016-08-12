@@ -1,8 +1,21 @@
 <div class='file-explorer-wrapper noselect transition-enabled-2'>
   <div class='file-explorer'>
     <div class='section content-wrapper'>
+      <h4 class='color-primary m-b-1'>
+        <p class='in-bl'>File explorer </p>
+        {{#nano-tooltip id="tamere" class='in-bl' content="Select the application you want to publish" position="right" triggerEvent='custom' enabled=isVisible}}
+          {{icon-component class="va-sub" materialIcon="help"}} 
+        {{/nano-tooltip}}
+      </h4>
+<!--
     <p class="color-primary indication">Select the application you want to publish</p>
-      <h4>{{ file-path data=historyData class="filePath" clickOnPath=(action 'moveOffset') }}</h4>
+-->
+        <ol class="breadcrumb" style="margin-bottom: 5px;">
+          {{#each history as |item index|}}
+            <li><a {{ action "clickPath" index}}>{{ item }}</a></li>
+          {{/each}} 
+          <li><a {{ action "clickPath" index}}>{{ selectedFile.name }}</a></li>
+        </ol>
         <div class='navigation'>
           <i {{ action "clickPrevBtn" }} class="navigation-btn material-icons">navigate_before</i>
           <i {{ action "clickNextBtn" }} class="navigation-btn material-icons">navigate_next</i>
@@ -10,7 +23,6 @@
         <div class='file-list-wrapper'>
         {{#each items as |item|}}
           <div {{ action "clickItem" item }} class="item {{ if (is-equal selectedFile item) 'selected' }}">
-            <i class='va-top material-icons'>{{ item.icon }}</i>
             {{ item.name }}
           </div>
         {{else}}
@@ -23,11 +35,6 @@
         {{else}}
           <button {{ action "clickPublish" }} type="button" class="publish-btn btn {{ if selectedFile 'btn-primary' 'btn-secondary-outline disabled' }}">Publish it!</button>
         {{/if}}
-        <span class='info'>
-        {{#if selectedFile}}
-          Selected file : {{ selectedFile.name }}
-        {{/if}}
-        </span>
       </div>
     </div>
   </div>

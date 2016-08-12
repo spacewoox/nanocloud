@@ -26,4 +26,23 @@ import TooltipsterComponent from 'ember-cli-tooltipster/components/tool-tipster'
 
 export default TooltipsterComponent.extend({
   classNames: ['tooltip-component'],
+
+  becameVisible: function() {
+    //this.addObserver('isVisible', setTooltipVisibility);
+    this.setTooltipVisibility();
+  },
+
+  toto: function() {
+    console.log("coucou");
+    this.setTooltipVisibility();
+  }.observes('enabled'),
+
+  setTooltipVisibility() {
+    if (this.get('enabled')) {
+      $('#tamere').tooltipster('show');
+    }
+    else {
+      $('#tamere').tooltipster('hide');
+    }
+  },
 });

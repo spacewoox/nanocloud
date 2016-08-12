@@ -77,8 +77,20 @@
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 600px) {
   .file-explorer-wrapper {
     width: 100%;
+  }
+}
+
+@media (max-width:1200px) and (min-width:600px) {
+  .file-explorer-wrapper {
+    width: 70%;
+  }
+}
+
+@media (max-width:1200px) and (min-width:990px) {
+  .file-explorer-wrapper {
+    width: 50%;
   }
 }
