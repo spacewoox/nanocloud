@@ -84,15 +84,24 @@ module.exports = {
    */
 
   files: function(req, res) {
-    let user = req.user;
 
-    StorageService.findOrCreate(user)
-      .then((storage) => {
-        return PlazaService.files(storage, '/home/' + storage.username);
-      })
-      .then((files) => {
-        return res.send(files);
-      });
+    let getFiles;
+
+    if (req.allParams().machines === "true") {
+      getFiles = PlazaService.files({
+        hostname: '52.58.25.231',
+        port: 9090
+      }, req.allParams().path || 'C:\\');
+    } else {
+      getFiles = StorageService.findOrCreate(req.user)
+        .then((storage) => {
+          return PlazaService.files(storage, '/home/' + storage.username);
+        });
+    }
+
+    getFiles.then((files) => {
+      return res.send(files);
+    });
   },
 
   /**
