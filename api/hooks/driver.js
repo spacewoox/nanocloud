@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global MachineService */
+/* global MachineService, Image */
 
 /**
  * Initialize the MachineService

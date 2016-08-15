@@ -1,4 +1,5 @@
 /**
+<<<<<<< 6f84a52cdc54b50c2bacdacbfe3bede88217fee0
  * Nanocloud turns any traditional software into a cloud solution, without
  * changing or redeveloping existing source code.
  *
@@ -20,13 +21,6 @@
  * Public License
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
- */
-
-/**
- * ImageController
- *
- * @description :: Server-side logic for managing images
- * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 /* globals JsonApiService, MachineService */
