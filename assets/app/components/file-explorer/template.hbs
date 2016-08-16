@@ -3,24 +3,24 @@
     <div class='section content-wrapper'>
       <h4 class='color-primary m-b-1'>
         <p class='in-bl'>File explorer </p>
-        {{#nano-tooltip id="tamere" class='in-bl' content="Select the application you want to publish" position="right"}}
+        {{#nano-tooltip class='in-bl' content="Select the application you want to publish" position="right"}}
           {{icon-component class="va-sub" materialIcon="help"}} 
         {{/nano-tooltip}}
       </h4>
-        <ol class="breadcrumb" style="margin-bottom: 5px;">
+        <ol class="breadcrumb">
           {{#each historyData as |item index|}}
             <li class='clickable'><a {{ action "moveOffset" index}}>{{ item }}</a></li>
           {{/each}} 
           <li><a>{{ selectedFile.name }}</a></li>
         </ol>
-        <div class='navigation'>
-          <i {{ action "clickPrevBtn" }} class="navigation-btn material-icons">navigate_before</i>
-          <i {{ action "clickNextBtn" }} class="navigation-btn material-icons">navigate_next</i>
+        <div class='navigation m-t-1'>
+          <span {{ action "clickPrevBtn" }}>{{icon-component class='clickable icon_link va-bl-mid' materialIcon="navigate_before" size=20}}</span>
+          <span {{ action "clickNextBtn" }}>{{icon-component class='clickable icon_link va-bl-mid' materialIcon="navigate_next" size=20}}</span>
         </div>
-        <div class='file-list-wrapper'>
+        <div class='file-list-wrapper m-t-1'>
         {{#each items as |item|}}
           <div {{ action "clickItem" item }} class="item {{ if (is-equal selectedFile item) 'selected' }}">
-            {{ item.name }}
+            {{icon-component class='clickable color-primary va-mid' materialIcon=item.icon size=15}}{{ item.name }}
           </div>
         {{else}}
           No files.

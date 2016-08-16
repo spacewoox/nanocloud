@@ -31,4 +31,7 @@ export default DS.Model.extend({
   modTime: DS.attr('date'),
   isSelected: false,
   isDir: Ember.computed.equal('type', 'directory'),
+  icon: Ember.computed('isDir', function() {
+    return this.get('isDir') ? 'folder_open' : 'insert_drive_file';
+  })
 });
