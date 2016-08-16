@@ -27,6 +27,9 @@ import Ember from 'ember';
 let App = Ember.Object.extend({
   remoteSession: Ember.inject.service('remote-session'),
   model: null,
+  showFileExplorer: false,
+  publishRootFolder: 'C://',
+  publishEndpoint: 'files',
 
   id: Ember.computed('model.id', function() {
     return this.get('model.id');
@@ -175,6 +178,18 @@ export default Ember.Controller.extend({
         });
         desktop.launch();
       }
-    }
+    },
+
+    toggleFileExplorer() {
+      this.toggleProperty('showFileExplorer');
+    },
+
+    closeFileExplorer() {
+      this.set('showFileExplorer', false);
+    },
+
+    openFileExplorer() {
+      this.set('showFileExplorer', true);
+    },
   }
 });

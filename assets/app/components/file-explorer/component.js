@@ -27,15 +27,24 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   isVisible: false,
   publishError: false,
+  store: Ember.inject.service('store'),
 
-  files: Ember.computed(function() {
-    return (this.get('model'));
+  loadDirectory() {
+    this.set('selectedFile', null);
+    this.set('items', this.get('store').query(this.get('api'), {
+      machines: true,
+      path: this.get('pathToString')
+    }));
+  },
+
+  historyData: Ember.computed('history_offset', function() {
+    return (this.pathToArray());
   }),
 
   becameVisible: function() {
-    this.set('history', [ "Root" ]);
+    this.set('history', [ "C:" ]);
     this.set('history_offset', 0);
-    this.set('selectedFile', null);
+    this.loadDirectory();
   },
 
   selectFile(file) {
@@ -54,6 +63,9 @@ export default Ember.Component.extend({
 
   goToDirectory(folder) {
     this.get('history').pushObject(folder);
+    var len = this.get('history').get('length');
+    this.get('history').splice(this.get('history_offset'), (len-1) - this.get('history_offset'));
+    this.loadDirectory();
   },
 
   goBack() {
@@ -61,6 +73,7 @@ export default Ember.Component.extend({
       return;
     }
     this.decrementProperty('history_offset');
+    this.loadDirectory();
   },
 
   goNext() {
@@ -68,12 +81,23 @@ export default Ember.Component.extend({
       return;
     }
     this.incrementProperty('history_offset');
+    this.loadDirectory();
+  },
+
+  pathToArray() {
+    var data = this.get('history');
+    var offset = this.get('history_offset');
+    var path = [];
+    for (var i = 0; i <= offset; i++) {
+      path.pushObject(data[i]);
+    }
+    return (path);
   },
 
   pathToString: Ember.computed('history', 'history_offset', function() {
-    var data = this.get('history');
-    var offset = this.get('history_offset');
-    var path = "";
+    let data = this.get('history');
+    let offset = this.get('history_offset');
+    let path = "";
     for (var i = 0; i <= offset; i++) {
       path += data[i] + "\\";
     }
@@ -81,6 +105,29 @@ export default Ember.Component.extend({
   }),
 
   publishSelectedFile() {
+
+    let name = this.get('selectedFile').get('name').replace(/\.[^/.]+$/, "");
+
+    let m = this.get('store').createRecord('app', {
+      alias: name,
+      displayName: name, 
+      collectionName: "collection",
+      filePath: this.get('pathToString') + this.get('selectedFile').get('name')
+    });
+
+    this.set('isPublishing', true);
+    m.save()
+      .then(() => {
+        this.set('isPublishing', false);
+        this.toggleProperty('isVisible');
+        this.toast.success("Your application has been published successfully");
+        this.sendAction('publishDone');
+      }, (error) => {
+        this.set('isPublishing', false);
+        this.set('publishError', true);
+        this.set('selectedFile', null);
+        this.toast.error(error.errors[0].status + " : " + error.errors[0].title);
+      });
   },
 
   selectedFilePath: Ember.computed('pathToString', 'selectedFile', function() {
@@ -91,6 +138,7 @@ export default Ember.Component.extend({
 
     moveOffset(offset) {
       this.set('history_offset', offset);
+      this.loadDirectory();
     },
 
     toggleFileExplorer() {
@@ -98,8 +146,11 @@ export default Ember.Component.extend({
     },
 
     clickItem(item) {
-      console.log('click item');
-      this.selectFile(item);
+      if (item.get('isDir')) {
+        this.selectDir(item.get('name'));
+      } else {
+        this.selectFile(item);
+      }
     },
 
     clickPublish() {
@@ -113,10 +164,6 @@ export default Ember.Component.extend({
     clickPrevBtn() {
       this.goBack();
     },
-
-    clickPath(index) {
-      this.get('clickOnPath')(index);
-    }
   }
 });
 

@@ -10,6 +10,7 @@
     {{else}}
       <div class='action-btn-wrapper'>
         <button class="btn btn-primary" {{action "startDesktop"}}>Desktop</button>
+        <button class="btn btn-primary" {{action "openFileExplorer"}}>Publish</button>
       </div>
     {{/if}}
   {{/if}}
@@ -42,5 +43,10 @@
 {{/single-tab}}
 
 {{dim-background show=showFileExplorer preventAction=isPublishing action="toggleFileExplorer"}}
-{{#file-explorer isVisible=showFileExplorer isPublishing=isPublishing}}
+{{#file-explorer
+  isVisible=showFileExplorer
+  isPublishing=isPublishing
+  api="file"
+}}
 {{/file-explorer}}
+{{publishRootFolder}}

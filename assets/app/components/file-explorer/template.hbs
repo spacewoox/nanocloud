@@ -3,18 +3,15 @@
     <div class='section content-wrapper'>
       <h4 class='color-primary m-b-1'>
         <p class='in-bl'>File explorer </p>
-        {{#nano-tooltip id="tamere" class='in-bl' content="Select the application you want to publish" position="right" triggerEvent='custom' enabled=isVisible}}
+        {{#nano-tooltip id="tamere" class='in-bl' content="Select the application you want to publish" position="right"}}
           {{icon-component class="va-sub" materialIcon="help"}} 
         {{/nano-tooltip}}
       </h4>
-<!--
-    <p class="color-primary indication">Select the application you want to publish</p>
--->
         <ol class="breadcrumb" style="margin-bottom: 5px;">
-          {{#each history as |item index|}}
-            <li><a {{ action "clickPath" index}}>{{ item }}</a></li>
+          {{#each historyData as |item index|}}
+            <li class='clickable'><a {{ action "moveOffset" index}}>{{ item }}</a></li>
           {{/each}} 
-          <li><a {{ action "clickPath" index}}>{{ selectedFile.name }}</a></li>
+          <li><a>{{ selectedFile.name }}</a></li>
         </ol>
         <div class='navigation'>
           <i {{ action "clickPrevBtn" }} class="navigation-btn material-icons">navigate_before</i>

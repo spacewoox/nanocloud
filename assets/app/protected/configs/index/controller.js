@@ -25,32 +25,4 @@
 import Ember from 'ember';
 export default Ember.Controller.extend({
   configController: Ember.inject.controller('protected.configs'),
-  showFileExplorer: false,
-
-  files: [
-    { name: "Hello1" },
-    { name: "Hello2" },
-    { name: "Hello3" },
-    { name: "Hello4" },
-    { name: "Hello5" },
-    { name: "Hello6" },
-    { name: "Hello7" },
-    { name: "Hello8" },
-    { name: "Hello9" },
-  ],
-
-  actions: {
-
-    toggleFileExplorer() {
-      this.toggleProperty('showFileExplorer');
-    },
-
-    closeFileExplorer() {
-      this.set('showFileExplorer', false);
-    },
-
-    openFileExplorer() {
-      this.set('showFileExplorer', true);
-    },
-  }
 });
