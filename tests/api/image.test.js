@@ -23,7 +23,7 @@
  */
 
 // jshint mocha:true
-/* globals sails */
+/* globals sails, MachineService */
 
 var nano = require('./lib/nanotest');
 var chai = require('chai');
@@ -72,7 +72,7 @@ module.exports = function() {
             .then((res) => {
               let image = res.body.data;
 
-              expect(image.attributes.default).to.be.true;
+              expect(image.attributes.default).to.be.equal(true);
               expect(image.attributes.name).to.be.equal('New image');
               expect(image.attributes['build-from']).to.be.equal(userMachine.id);
               return done();

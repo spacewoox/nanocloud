@@ -22,25 +22,8 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-const uuid = require('node-uuid');
+import DS from 'ember-data';
 
-/* globals JsonApiService, MachineService */
-
-module.exports = {
-
-  create: function(req, res) {
-
-    let image = JsonApiService.deserialize(req.body.data.attributes);
-
-    MachineService.getMachineForUser(req.user)
-      .then((machine) => {
-
-        return MachineService.createImage({
-          name: uuid.v4(),
-          buildFrom: machine.id
-        });
-      })
-      .then(res.created)
-      .catch(res.negotiate);
-  }
-};
+export default DS.Model.extend({
+  name: DS.attr('string')
+});
