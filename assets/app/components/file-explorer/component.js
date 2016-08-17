@@ -28,13 +28,20 @@ export default Ember.Component.extend({
   isVisible: false,
   publishError: false,
   store: Ember.inject.service('store'),
+  loadState: false,
 
   loadDirectory() {
     this.set('selectedFile', null);
-    this.set('items', this.get('store').query(this.get('api'), {
+    this.set('loadState', true);
+    let loadFilesPromise = this.get('store').query(this.get('api'), {
       machines: true,
       path: this.get('pathToString')
-    }));
+    });
+    this.set('items', loadFilesPromise);
+    loadFilesPromise.then(() => {
+      console.log('load state false');
+      this.set('loadState', false);
+    });
   },
 
   historyData: Ember.computed('history_offset', function() {

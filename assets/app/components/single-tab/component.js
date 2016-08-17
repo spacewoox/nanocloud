@@ -30,6 +30,7 @@ export default Ember.Component.extend({
   classNames: ['single-tab'],
   remoteSession: Ember.inject.service('remote-session'),
   session: Ember.inject.service('session'),
+  showFileExplorer: false,
 
   connectionName: null,
   logoff: false,
@@ -46,6 +47,8 @@ export default Ember.Component.extend({
   store: Ember.inject.service(),
   savePackageModal: false,
   savePackageName: '',
+  saveImagePromptModal: false,
+  saveImageState: 0,
 
   RECORD_DEFAULT: 0,
   RECORD_WAIT: 1,
@@ -239,7 +242,49 @@ export default Ember.Component.extend({
     return false;
   }),
 
+  saveImage() {
+    console.log('saving image');
+    this.set('saveImageState', 1); // visible. loading
+    setTimeout(() => {
+      this.set('saveImageState', 2); // visible. done loading. user should close it
+    }, 2000);
+  },
+
   actions: {
+
+    clickOnboardApp() {
+      this.set('onboardApp', true);
+      this.send('toggleSaveImagePrompt');
+    },
+
+    toggleSaveImagePrompt() {
+      this.toggleProperty('saveImagePromptModal');
+    },
+
+    saveImagePromptAnswerNo() {
+      this.toggleProperty('saveImagePromptModal');
+      this.set('saveImageState', 0);
+      if (this.get('onboardApp')) {
+        this.send('toggleFileExplorer');
+      }
+      this.set('onboardApp', false);
+    },
+
+    saveImagePromptAnswerYes() {
+      this.saveImage();
+    },
+
+    toggleFileExplorer() {
+      this.toggleProperty('showFileExplorer');
+    },
+
+    closeFileExplorer() {
+      this.set('showFileExplorer', false);
+    },
+
+    openFileExplorer() {
+      this.set('showFileExplorer', true);
+    },
 
     retryConnection() {
       this.sendAction('retryConnection', this.get('connectionName'));

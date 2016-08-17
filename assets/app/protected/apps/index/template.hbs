@@ -13,12 +13,10 @@
     {{else}}
       <div class='action-btn-wrapper'>
         <button class="btn btn-primary" {{action "startDesktop"}}>Desktop</button>
+        <button class="btn btn-primary" {{action "openFileExplorer"}}>Onboard an application</button>
       </div>
     {{/if}}
   {{/if}}
-  <div class='action-btn-wrapper'>
-    <button class="btn btn-primary" {{action "openFileExplorer"}}>Publish</button>
-  </div>
   {{models-table
     class="sortableTable"
     data=data
@@ -55,4 +53,3 @@
   action="refreshModel"
 }}
 {{/file-explorer}}
-{{publishRootFolder}}

@@ -18,13 +18,17 @@
           <span {{ action "clickNextBtn" }}>{{icon-component class='clickable icon_link va-bl-mid' materialIcon="navigate_next" size=20}}</span>
         </div>
         <div class='file-list-wrapper m-t-1'>
-        {{#each items as |item|}}
-          <div {{ action "clickItem" item }} class="item {{ if (is-equal selectedFile item) 'selected' }}">
-            {{icon-component class='clickable color-primary va-mid' materialIcon=item.icon size=15}}{{ item.name }}
-          </div>
+        {{#if loadState}} 
+          {{loading-component}} 
         {{else}}
-          No files.
-        {{/each}}
+          {{#each items as |item|}}
+            <div {{ action "clickItem" item }} class="item {{ if (is-equal selectedFile item) 'selected' }}">
+              {{icon-component class='clickable color-primary va-mid' materialIcon=item.icon size=15}}{{ item.name }}
+            </div>
+          {{else}}
+            No files.
+          {{/each}}
+        {{/if}}
       </div>
       <div class='file-explorer-footer'>
         {{#if isPublishing}}
