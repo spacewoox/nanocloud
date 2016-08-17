@@ -87,7 +87,7 @@ module.exports = {
 
     let getFiles;
 
-    if (req.allParams().machines === "true") {
+    if (req.allParams().machines === 'true') {
       getFiles = PlazaService.files({
         hostname: '52.58.25.231',
         port: 9090
