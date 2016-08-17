@@ -20,7 +20,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* global MachineService */
+/* global MachineService, Image */
 
 /**
  * Initialize the MachineService
@@ -39,8 +39,8 @@ function Driver(sails) {
      * @param {Function} callback The initialize callback
      */
     initialize(callback) {
-      sails.after('hook:config:loaded', () => {
-        MachineService.initialize()
+      sails.after('hook:orm:loaded', () => {
+        return MachineService.initialize()
           .then(() => {
             const driverName = MachineService.driverName();
 
@@ -52,7 +52,6 @@ function Driver(sails) {
           });
       });
     }
-
   };
 }
 

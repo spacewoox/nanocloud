@@ -38,10 +38,18 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.policies.html
  */
 
+var timeout = require('connect-timeout');
 
 module.exports.policies = {
 
-  '*': 'isAuthorized',
+  '*': [
+    function(req, res, next) {
+      req.connection.setTimeout(10*60*1000);
+
+      return next();
+    },
+    'isAuthorized'
+  ],
 
   StorageController: {
     download: 'checkDownloadToken',

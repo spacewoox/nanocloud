@@ -90,7 +90,7 @@ module.exports = {
     if (req.allParams().machines === 'true') {
       getFiles = MachineService.getMachineForUser(req.user)
         .then((machine) => {
-          PlazaService.files({
+          return PlazaService.files({
             hostname: machine.ip,
             port: 9090
           }, req.allParams().path || 'C:\\');
