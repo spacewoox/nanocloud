@@ -267,19 +267,35 @@
               </div>
             </div>
           {{else}}
-            <div class="modal-body">
-              <div>
+            {{#if (is-equal saveImageState 2)}}
+              <div class="modal-body">
                 <div>
-                  <div class='centered'>
-                    {{icon-component class='color-success' size=50 materialIcon="done"}}
+                  <div>
+                    <div class='centered'>
+                      {{icon-component class='color-success' size=50 materialIcon="done"}}
+                    </div>
+                    <p class='centered color-primary'>Your image has been saved.</p>
                   </div>
-                  <p class='centered color-primary'>Your image has been saved.</p>
-                </div>
-                <div class='centered'>
-                  <button type="button" class="btn btn-primary" {{action "saveImagePromptAnswerNo"}}>Aknowledge</button>
+                  <div class='centered'>
+                    <button type="button" class="btn btn-primary" {{action "saveImagePromptAnswerNo"}}>Aknowledge</button>
+                  </div>
                 </div>
               </div>
-            </div>
+            {{else}}
+              <div class="modal-body">
+                <div>
+                  <div>
+                    <div class='centered'>
+                      {{icon-component class='error' size=50 materialIcon="close"}}
+                    </div>
+                    <p class='centered color-primary'>An error occured</p>
+                  </div>
+                  <div class='centered'>
+                    <button type="button" class="btn btn-primary" {{action "saveImagePromptAnswerNo"}}>Aknowledge</button>
+                  </div>
+                </div>
+              </div>
+            {{/if}}
           {{/if}}
         {{/if}}
       </div>

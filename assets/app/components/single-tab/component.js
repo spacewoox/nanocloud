@@ -44,7 +44,7 @@ export default Ember.Component.extend({
   showState: false,
   dragAndDropActive: false,
   windowIsSelected: false,
-  store: Ember.inject.service(),
+  store: Ember.inject.service('store'),
   savePackageModal: false,
   savePackageName: '',
   saveImagePromptModal: false,
@@ -243,11 +243,17 @@ export default Ember.Component.extend({
   }),
 
   saveImage() {
-    console.log('saving image');
-    this.set('saveImageState', 1); // visible. loading
-    setTimeout(() => {
-      this.set('saveImageState', 2); // visible. done loading. user should close it
-    }, 2000);
+    this.set('saveImageState', 1);
+    this.get('store').createRecord('image', {
+      name: "497324873284324"
+    })
+    .save()
+    .then(() => {
+      this.set('saveImageState', 2);
+    })
+    .catch(() => {
+      this.set('saveImageState', 3);
+    })
   },
 
   actions: {
