@@ -248,7 +248,7 @@
                     containerClassNames="modal-dialog"
                     translucentOverlay=true}}
       <div class="modal-content">
-        {{#if (is-equal saveImageState 0)}}
+        {{#if saveImageStateDefault}}
         <div class="modal-body">
           <div class='m-t-1 centered'>
             <p class='color-primary'>Do you want to save an image?</p>
@@ -259,7 +259,7 @@
           </div>
         </div>
         {{else}}
-          {{#if (is-equal saveImageState 1)}}
+          {{#if saveImageStateLoading}}
             <div class="modal-body">
               <div>
                 {{loading-component square=true}} 
@@ -267,7 +267,7 @@
               </div>
             </div>
           {{else}}
-            {{#if (is-equal saveImageState 2)}}
+            {{#if saveImageStateSuccess}}
               <div class="modal-body">
                 <div>
                   <div>

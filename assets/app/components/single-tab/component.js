@@ -24,6 +24,11 @@
 
 import Ember from 'ember';
 
+const SAVE_IMAGE_STATE_DEFAULT = 0;
+const SAVE_IMAGE_STATE_LOADING = 1;
+const SAVE_IMAGE_STATE_SUCCESS = 2;
+const SAVE_IMAGE_STATE_ERROR = 3;
+
 export default Ember.Component.extend({
 
   /* global $:false */
@@ -243,18 +248,23 @@ export default Ember.Component.extend({
   }),
 
   saveImage() {
-    this.set('saveImageState', 1);
+    this.set('saveImageState', SAVE_IMAGE_STATE_LOADING);
     this.get('store').createRecord('image', {
       name: "497324873284324"
     })
     .save()
     .then(() => {
-      this.set('saveImageState', 2);
+      this.set('saveImageState', SAVE_IMAGE_STATE_SUCCESS);
     })
     .catch(() => {
-      this.set('saveImageState', 3);
+      this.set('saveImageState', SAVE_IMAGE_STATE_ERROR);
     })
   },
+
+  saveImageStateDefault: Ember.computed.equal('saveImageState', SAVE_IMAGE_STATE_DEFAULT),
+  saveImageStateLoading: Ember.computed.equal('saveImageState', SAVE_IMAGE_STATE_LOADING),
+  saveImageStateSuccess: Ember.computed.equal('saveImageState', SAVE_IMAGE_STATE_SUCCESS),
+  saveImageStateError: Ember.computed.equal('saveImageState', SAVE_IMAGE_STATE_ERROR),
 
   actions: {
 
