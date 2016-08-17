@@ -1,5 +1,4 @@
 /**
-<<<<<<< 6f84a52cdc54b50c2bacdacbfe3bede88217fee0
  * Nanocloud turns any traditional software into a cloud solution, without
  * changing or redeveloping existing source code.
  *

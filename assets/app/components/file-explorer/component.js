@@ -39,7 +39,6 @@ export default Ember.Component.extend({
     });
     this.set('items', loadFilesPromise);
     loadFilesPromise.then(() => {
-      console.log('load state false');
       this.set('loadState', false);
     });
   },
@@ -117,7 +116,7 @@ export default Ember.Component.extend({
 
     let m = this.get('store').createRecord('app', {
       alias: name,
-      displayName: name, 
+      displayName: name,
       collectionName: "collection",
       filePath: this.get('pathToString') + this.get('selectedFile').get('name')
     });

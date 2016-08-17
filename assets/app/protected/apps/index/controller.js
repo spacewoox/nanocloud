@@ -27,8 +27,6 @@ import Ember from 'ember';
 let App = Ember.Object.extend({
   remoteSession: Ember.inject.service('remote-session'),
   model: null,
-  publishRootFolder: 'C://',
-  publishEndpoint: 'files',
 
   id: Ember.computed('model.id', function() {
     return this.get('model.id');

@@ -53,7 +53,7 @@ export default Ember.Component.extend({
   savePackageModal: false,
   savePackageName: '',
   saveImagePromptModal: false,
-  saveImageState: 0,
+  saveImageState: SAVE_IMAGE_STATE_DEFAULT,
 
   RECORD_DEFAULT: 0,
   RECORD_WAIT: 1,
@@ -279,7 +279,7 @@ export default Ember.Component.extend({
 
     saveImagePromptAnswerNo() {
       this.toggleProperty('saveImagePromptModal');
-      this.set('saveImageState', 0);
+      this.set('saveImageState', SAVE_IMAGE_STATE_DEFAULT);
       if (this.get('onboardApp')) {
         this.send('toggleFileExplorer');
       }
