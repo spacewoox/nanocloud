@@ -200,6 +200,15 @@ export default Ember.Component.extend({
     }
   }.observes('savePackageModal'),
 
+  handleFileExplorerModalInputs: function() {
+    if (this.get('showFileExplorer')) {
+      this.get('remoteSession').pauseInputs(this.get('connectionName'));
+    }
+    else {
+      this.get('remoteSession').restoreInputs(this.get('connectionName'));
+    }
+  }.observes('showFileExplorer'),
+
   onConnectionNameChange: function() {
   }.observes('connectionName'),
 
