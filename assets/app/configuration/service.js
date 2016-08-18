@@ -46,7 +46,8 @@ export default Ember.Service.extend({
     'primaryColor',
     'uploadLimit',
     'creditLimit',
-    'iaas'
+    'iaas',
+    'teamEnabled',
   ],
   keyToBeRetrievedAsString: Ember.computed('keyToBeRetrieved', function() {
     let params = this.get('keyToBeRetrieved');
