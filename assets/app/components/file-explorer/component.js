@@ -103,11 +103,8 @@ export default Ember.Component.extend({
   pathToString: Ember.computed('history', 'history_offset', function() {
     let data = this.get('history');
     let offset = this.get('history_offset');
-    let path = '';
-    for (var i = 0; i <= offset; i++) {
-      path += data[i] + '\\';
-    }
-    return (path);
+    let path = data.slice(0, offset + 1).join('\\') + '\\';
+    return path;
   }),
 
   publishSelectedFile() {
