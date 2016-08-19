@@ -118,7 +118,7 @@ export default Ember.Component.extend({
       alias: name,
       displayName: name,
       collectionName: 'collection',
-      filePath: this.get('pathToString') + this.get('selectedFile').get('name')
+      filePath: this.get('pathToString') + this.get('selectedFile.name')
     });
 
     this.set('isPublishing', true);
