@@ -25,4 +25,14 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  actions: {
+    loading(transition, originRoute) {
+      console.log('is loading');
+      let controller = this.controllerFor('protected.users');
+      controller.set('isLoading', true);
+      transition.promise.finally(function() {
+        controller.set('isLoading', false);
+      });
+    }
+  }
 });

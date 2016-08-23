@@ -26,11 +26,14 @@ import Ember from 'ember';
 import config from 'nanocloud/config/environment';
 
 export default Ember.Controller.extend({
+  session: Ember.inject.service('session'),
   applicationController: Ember.inject.controller('application'),
   routeName: Ember.computed.alias('applicationController.currentRouteName'),
   connectionName: null,
+  teamModal: false,
+  teamIsEmpty: Ember.computed.empty('session.user.team'),
+  showModal: Ember.computed.and('teamModal', 'teamIsEmpty'),
 
-  session: Ember.inject.service('session'),
   name: config.APP.name,
   version: config.APP.version,
 
@@ -64,6 +67,23 @@ export default Ember.Controller.extend({
   }),
 
   actions: {
+
+    closeModal() {
+      this.set('teamModal', false);
+    },
+
+    createTeam() {
+      let input = this.get('teamModel');
+      this.get('teamModel').save()
+        .then(() => {
+          this.toast.success('Team has been created successfully');
+          this.send('closeModal');
+        })
+        .catch(() => {
+          this.toast.error('An error occured. Team has not been created');
+        })
+    },
+
     toggleSidebar() {
       this.toggleProperty('showSidebar');
     },

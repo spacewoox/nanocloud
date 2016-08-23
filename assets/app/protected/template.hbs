@@ -67,6 +67,17 @@
             </li>
           {{/unless}}
 
+          {{#unless session.user.isAdmin}}
+            <li>
+                {{#link-to 'protected.users.teams'}}
+                <span class="icon">
+                    <i class="material-icons">assignment_ind</i>
+                </span>
+                Team
+                {{/link-to}}
+            </li>
+          {{/unless}}
+
           {{#if session.user.isAdmin}}
             <li>
               {{#link-to 'protected.histories'}}
@@ -141,4 +152,32 @@
     </nav>
     {{outlet}}
   </div>
+  {{#if showModal}}
+    {{#modal-dialog close="closeModal"
+                    targetAttachment="center"
+                    containerClassNames="modal-dialog"
+                    translucentOverlay=true}}
+      <div class="modal-content">
+        <div class="modal-body">
+          <p class="color-primary indication">To create a team, just type a name just here.</p>
+          <div class="form-group row">
+            <div class="col-sm-6">
+              {{nano-input hideError=userHasSubmitted placeholder='Your team name' model=teamModel valuePath="name" autofocus=true }}
+            </div>
+            <div class="col-sm-4">
+              <button class="btn btn-primary" {{ action "createTeam" }}>
+                {{#if renaming}}
+                  {{ fa-icon "spinner" spin=true }}
+                {{/if}}
+                Create
+              </button>
+              <button class="btn btn-secondary m-l-1" {{ action "closeModal" }}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/modal-dialog}}
+  {{/if}}
 </div>
