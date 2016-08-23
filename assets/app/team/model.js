@@ -5,8 +5,8 @@ export default DS.Model.extend({
   name: DS.attr('string'),
   createdAt: DS.attr('number'),
   updatedAt: DS.attr('number'),
-  members: DS.attr(),
-  pendingMembers: DS.attr(),
+  members: DS.hasMany(),
+  pendingMembers: DS.hasMany(),
   allMembers: Ember.computed('members', 'pendingMembers', function() {
     let user = Ember.A([]);
     this.get('members').forEach((item) => {

@@ -6,7 +6,7 @@ export default Ember.Route.extend({
   },
 
   model() {
-    return this.store.queryRecord('team', {});
+    return this.store.query('team', {});
   },
 
 	actions: {
