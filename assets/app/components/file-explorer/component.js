@@ -56,7 +56,6 @@ export default Ember.Component.extend({
     this._super(...arguments);
   },
 
-
   selectDir(dir) {
     this.incrementProperty('history_offset');
     this.goToDirectory(dir);
@@ -98,10 +97,6 @@ export default Ember.Component.extend({
   pathToString: Ember.computed('history', 'history_offset', function() {
     let data = this.get('history');
     let offset = this.get('history_offset');
-<<<<<<< 8a1c58db41efd6ea3f6332a9d1e8970fe5351a6b
-=======
-
->>>>>>> display file explorer in team page
     let separator = this.get('system') === 'windows' ? '\\' : '\/';
     let path = data.slice(0, offset + 1).join(separator) + separator;
     return path;
@@ -109,10 +104,6 @@ export default Ember.Component.extend({
 
   downloadFile(filename) {
     let path = this.get('pathToString').substring(1) + filename;
-<<<<<<< 8a1c58db41efd6ea3f6332a9d1e8970fe5351a6b
-=======
-    console.log(path);
->>>>>>> display file explorer in team page
     Ember.$.ajax({
       type: 'GET',
       headers: { Authorization : 'Bearer ' + this.get('session.access_token')},
@@ -120,11 +111,7 @@ export default Ember.Component.extend({
       data: { filename: path }
     })
       .then((response) => {
-<<<<<<< 8a1c58db41efd6ea3f6332a9d1e8970fe5351a6b
         let url = '/api/files/download?' + this.get('target') + '=true&filename=' + encodeURIComponent(path) + '&token=' + encodeURIComponent(response.token);
-=======
-        let url = '/api/files/download?filename=' + encodeURIComponent(path) + '&token=' + encodeURIComponent(response.token);
->>>>>>> display file explorer in team page
         window.location.assign(url);
       });
   },
@@ -140,10 +127,6 @@ export default Ember.Component.extend({
       if (item.get('isDir')) {
         this.selectDir(item.get('name'));
       } else {
-<<<<<<< 8a1c58db41efd6ea3f6332a9d1e8970fe5351a6b
-=======
-        console.log(this.get('name'));
->>>>>>> display file explorer in team page
         this.downloadFile(item.get('name'));
       }
     },
@@ -155,6 +138,5 @@ export default Ember.Component.extend({
     clickPrevBtn() {
       this.goBack();
     },
-
   }
 });
