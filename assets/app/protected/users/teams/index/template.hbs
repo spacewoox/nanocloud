@@ -74,20 +74,6 @@
     {{/file-explorer}}
   {{/if}}
   {{#if protectedController.isAdminOrTeamAdmin}}
-    {{#if protectedController.hasTeam}}
-      <h4 class='pull-xs-right'>
-          {{#link-to 'protected.users.teams.new' class='btn btn-primary'}}Create a new user{{/link-to}}
-      </h4>
-      <div class="clearfix"></div>
-      {{#file-explorer
-        isPublishing=isPublishing
-        api="file"
-        target='teams'
-        system='unix'
-        action="refreshModel"
-      }}
-      {{/file-explorer}}
-    {{/if}}
     {{#each teams as |team|}}
       <h4 class='m-t-1 m-b-1 color-primary'> Teams
         <div class='in-bl'>
