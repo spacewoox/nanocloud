@@ -56,6 +56,7 @@ export default Ember.Component.extend({
     this._super(...arguments);
   },
 
+
   selectDir(dir) {
     this.incrementProperty('history_offset');
     this.goToDirectory(dir);
