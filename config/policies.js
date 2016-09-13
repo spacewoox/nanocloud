@@ -74,11 +74,9 @@ module.exports.policies = {
   },
 
   StorageController: {
-    create: false,
     update: false,
     find: false,
     findOne: false,
-    destroy: false,
     download: 'checkDownloadToken'
   },
 
