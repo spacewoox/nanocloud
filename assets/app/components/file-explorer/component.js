@@ -202,6 +202,7 @@ export default Ember.Component.extend({
         .then(() => {
           this.toast.success('File has been created successfully');
           this.loadDirectory();
+          this.set('createFolderInput', '');
         }, () => {
           this.toast.error('File could not be created');
         });
