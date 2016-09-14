@@ -38,6 +38,17 @@ export default Ember.Component.extend({
     return false;
   }),
 
+  targetDirectory: Ember.computed('lastObjectHovered.name', function() {
+    let targetDirectory = this.get('lastObjectHovered.name');
+    if (targetDirectory === undefined) {
+      targetDirectory = '';
+    }
+    else {
+      targetDirectory += '/';
+    }
+    return targetDirectory;
+  }),
+
   loadDirectory() {
     this.set('loadState', true);
     let parameters = {
@@ -149,16 +160,8 @@ export default Ember.Component.extend({
 
     dropAction(item) {
 
-      let targetDirectory = this.get('lastObjectHovered.name');
-      if (targetDirectory === undefined) {
-        targetDirectory = '';
-      }
-      else {
-        targetDirectory += '/';
-      }
-
       let old = this.get('elementBeingDraggedPath') + item.get('name');
-      let dest = this.get('pathToString') + targetDirectory + item.get('name');
+      let dest = this.get('pathToString') + this.get('targetDirectory') + item.get('name');
 
       Ember.$.ajax({
         type: 'PATCH',
@@ -174,6 +177,37 @@ export default Ember.Component.extend({
         }, () => {
           this.toast.error('File could not be moved');
         });
+    },
+
+    uploadFile(file) {
+      let req = new XMLHttpRequest();
+      this.set('req', req);
+      req.open('POST', '/api/upload?filename=' + file.name + '&dest=' + this.get('targetDirectory') + file.name);
+      req.setRequestHeader('Authorization', 'Bearer ' + this.get('session.access_token'));
+      req.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          let p = event.loaded / event.total;
+          if (p === 1) {
+            this.set('uploading', false);
+            this.loadDirectory();
+          }
+          this.set('progress', Math.round(event.loaded / event.total * 100));
+        }
+      };
+      req.onload = (res) => {
+        if (res.target.status === 403) {
+          this.set('forbidden', true);
+          this.trigger('forbidden');
+        } else {
+          this.set('completed', true);
+          this.trigger('completed');
+        }
+        this.set('uploading', false);
+      };
+      this.set('uploading', true);
+      var formData = new FormData();
+      formData.append(file.name, file);
+      req.send(formData);
     },
 
     clickNextBtn() {

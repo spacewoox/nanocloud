@@ -79,10 +79,20 @@ export default Ember.Component.extend({
     return false;
   },
 
-  drop() {
+  drop(event) {
     event.preventDefault();
     this.abortChangeDir();
-    this.sendAction('dropAction');
+
+    let uploadData = event.dataTransfer.files;
+    if (uploadData.length > 0) {
+      this.sendAction('onFileUpload', event.dataTransfer.files[0]);
+    }
+    else {
+      if (this.get('lastObjectHovered') !== this.get('elementBeingDragged')) {
+        this.sendAction('dropAction');
+      }
+    }
+
     this.set('lastObjectHovered', null);
     return false;
   },

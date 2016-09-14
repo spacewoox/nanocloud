@@ -36,6 +36,13 @@
           }}
           {{/edit-text}}
         {{/if}}
+        {{#if uploading}}
+          <div class='pull-xs-right'>
+            {{#text-component class='inl va-top' size=11}}
+              {{progress}} %
+            {{/text-component}}
+          </div>
+        {{/if}}
       </div>
     </div>
     {{#if loadState}}
@@ -47,6 +54,7 @@
         class='target-current-folder'
         classBinding="displayBlueBorder:active"
         elementBeingDraggedPath=elementBeingDraggedPath
+        onFileUpload="uploadFile"
         dropAction=(action 'dropAction' elementBeingDragged)
       }}
         <div class='list-items'>
@@ -69,7 +77,9 @@
               enabled=item.isDir
               lastObjectHovered=lastObjectHovered
               elementBeingDragged=elementBeingDragged
+              elementBeingDraggedPath=elementBeingDraggedPath
               setLastObjectHovered=(action 'setLastObjectHovered' item)
+              onFileUpload="uploadFile"
               dragAction=(action 'dragAction' item)
               dropAction=(action 'dropAction' elementBeingDragged)
             }}
