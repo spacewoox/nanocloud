@@ -47,6 +47,10 @@ export default Ember.Controller.extend(
     // state
     logoff: false,
 
+    init: function() {
+      this.get('remoteSession').startConnection();
+    },
+
     vdiDisconnectHandler(options) {
       this.set('logoff', true);
       Ember.$.ajax({

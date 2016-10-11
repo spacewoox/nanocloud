@@ -103,7 +103,8 @@ export default Ember.Service.extend(Ember.Evented, {
 
       return  {
         tunnel : tunnel,
-        guacamole: guacamole
+        guacamole: guacamole,
+        status: 0,
       };
     }, () => {
       this.stateChanged(this.get('STATE_DISCONNECTED'), true, 'Could not authenticate session');
@@ -191,4 +192,122 @@ export default Ember.Service.extend(Ember.Evented, {
       this.trigger('connected');
     }
   },
+
+  getWidth: function() {
+    return Ember.$(this.element).parent().width();
+  },
+
+  getHeight: function() {
+    return Ember.$(this.element).parent().height() - 25; // minus topbar height
+  },
+
+  startConnection(connectionName) {
+
+    if (Ember.isEmpty(connectionName)) {
+      return ;
+    }
+
+    let width = this.getWidth();
+    let height = this.getHeight();
+    let guacSession = this.getSession(connectionName, width, height);
+
+    this.set('guacamole', guacSession);
+    guacSession.then((guacData) => {
+      guacData.tunnel.onerror = function(status) {
+        this.get('element').removeChild(guacData.guacamole.getDisplay().getElement());
+        var message = 'Opening a WebSocketTunnel has failed';
+        var code = getKeyFromVal(Guacamole.Status.Code, status.code);
+        if (code !== -1) {
+          message += ' - ' + code;
+        }
+        this.stateChanged(this.get('STATE_DISCONNECTED'), true, message);
+        this.disconnectSession(connectionName);
+        this.sendAction('onError', {
+          error : true,
+          message: 'You have been disconnected due to some error'
+        });
+      }.bind(this);
+      let guac = guacData.guacamole;
+
+      guac.onfile = function(stream, mimetype, filename) {
+        let blob_reader = new Guacamole.BlobReader(stream, mimetype);
+
+        blob_reader.onprogress = function() {
+          stream.sendAck('Received', Guacamole.Status.Code.SUCCESS);
+        }.bind(this);
+
+        blob_reader.onend = function() {
+          //Download file in browser
+          var element = document.createElement('a');
+          element.setAttribute('href', window.URL.createObjectURL(blob_reader.getBlob()));
+          element.setAttribute('download', filename);
+          element.style.display = 'none';
+          document.body.appendChild(element);
+
+          element.click();
+
+          document.body.removeChild(element);
+        }.bind(this);
+
+        stream.sendAck('Ready', Guacamole.Status.Code.SUCCESS);
+      }.bind(this);
+
+      guac.onstatechange = (state) => {
+        this.stateChanged(state);
+      };
+
+      guac.onclipboard = function(stream, mimetype) {
+
+        let blob_reader = new Guacamole.BlobReader(stream, mimetype);
+        blob_reader.onprogress = function() {
+          stream.sendAck('Received', Guacamole.Status.Code.SUCCESS);
+        }.bind(this);
+
+        blob_reader.onend = function() {
+          var arrayBuffer;
+          var fileReader = new FileReader();
+          fileReader.onload = function(e) {
+            arrayBuffer = e.target.result;
+            this.setCloudClipboard(connectionName, arrayBuffer);
+            if (navigator.userAgent.indexOf('Chrome') !== -1) {
+              window.postMessage({type: 'VDIExperience', value: arrayBuffer}, '*');
+            }
+          }.bind(this);
+          fileReader.readAsText(blob_reader.getBlob());
+        }.bind(this);
+      }.bind(this);
+
+      //this.get('element').appendChild(guac.getDisplay().getElement());
+
+      /*
+      this.get('remoteSession').keyboardAttach(this.get('connectionName'));
+      let mouse = new window.Guacamole.Mouse(guac.getDisplay().getElement());
+      */
+      let display = guac.getDisplay();
+      window.onresize = function() {
+        let width = this.getWidth();
+        let height = this.getHeight();
+
+        guac.sendSize(width, height);
+      }.bind(this);
+
+      /*
+      mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function(mouseState) {
+        guac.sendMouseState(mouseState);
+      }.bind(this);
+
+      display.oncursor = function(canvas, x, y) {
+        display.showCursor(!mouse.setCursor(canvas, x, y));
+      };
+      */
+
+      guac.connect();
+    });
+  },
+
+  switchScreen(connectionName, element) {
+    let guacSession = this.get('openedGuacSession')[connectionName];
+    //this.get('element').appendChild(guac.getDisplay().getElement());
+    element.appendChild(guacSession.guac.getDisplay().getElement());
+  }
 });

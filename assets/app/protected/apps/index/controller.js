@@ -51,6 +51,7 @@ let App = Ember.Object.extend({
 });
 
 export default Ember.Controller.extend({
+  store: Ember.inject.service('store'),
   showSingleTab: false,
   showFileExplorer: false,
   connectionName: null,
