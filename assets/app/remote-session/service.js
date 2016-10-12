@@ -24,6 +24,7 @@
 
 import Ember from 'ember';
 import config from 'nanocloud/config/environment';
+import getKeyFromVal from 'nanocloud/utils/get-key-from-value';
 
 /* global Guacamole */
 
@@ -34,12 +35,20 @@ export default Ember.Service.extend(Ember.Evented, {
   STATE_DISCONNECTED: 5,
 
   session: Ember.inject.service('session'),
-  guacamole: null,
   openedGuacSession: Ember.Object.create({}),
   guacToken: Ember.computed('session', 'session.access_token', function() {
     return Ember.$.post(config.GUACAMOLE_URL + 'api/tokens', {
       access_token: this.get('session.access_token')
     });
+  }),
+  vdiContainer: Ember.computed(function() {
+    return Ember.$('.vdiContainer')[0] || null;
+  }),
+  width: Ember.computed(function() {
+    return $(window).width();
+  }),
+  height: Ember.computed(function() {
+    return $(window).height() - 25;
   }),
 
   _forgeConnectionString: function(token, connectionName, width, height) {
@@ -69,14 +78,14 @@ export default Ember.Service.extend(Ember.Evented, {
     return connectString;
   },
 
-  keyboardAttach(name) {
+  keyboardAttach(connectionName) {
 
-    var session = this.get('openedGuacSession')[name];
-    var guacamole = session.guac;
-    var keyboard = session.keyboard;
+    let guacSession = this.get('openedGuacSession')[connectionName];
+    var guacamole = guacSession.guacamole;
+    var keyboard = guacSession.keyboard;
 
     if (!keyboard) {
-      keyboard = this.get('openedGuacSession')[name].keyboard = new window.Guacamole.Keyboard(document);
+      keyboard = this.get('openedGuacSession')[connectionName].keyboard = new window.Guacamole.Keyboard(document);
     }
 
     keyboard.onkeydown = function (keysym) {
@@ -88,22 +97,22 @@ export default Ember.Service.extend(Ember.Evented, {
     }.bind(this);
   },
 
-  getSession: function(name, width, height) {
+  getSession: function(connectionName) {
 
     this.set('isError', false);
     this.notifyPropertyChange('guacToken');
     return this.get('guacToken').then((token) => {
 
-      let tunnel = new Guacamole.WebSocketTunnel('/guacamole/websocket-tunnel?' + this._forgeConnectionString(token.authToken, name, width, height));
+      let tunnel = new Guacamole.WebSocketTunnel('/guacamole/websocket-tunnel?' + this._forgeConnectionString(token.authToken, connectionName, this.get('width'), this.get('height')));
       let guacamole = new Guacamole.Client(
         tunnel
       );
-      this.set('openedGuacSession.' + name, Ember.Object.create({ guac : guacamole }));
-
-      return  {
-        tunnel : tunnel,
-        guacamole: guacamole
+      let guacSession = {
+        guacamole: guacamole,
+        tunnel: tunnel,
       };
+      this.set('openedGuacSession.' + connectionName, Ember.Object.create(guacSession));
+      return guacSession;
     }, () => {
       this.stateChanged(this.get('STATE_DISCONNECTED'), true, 'Could not authenticate session');
     });
@@ -118,59 +127,45 @@ export default Ember.Service.extend(Ember.Evented, {
     document.body.removeChild(textArea);
   },
 
-  pauseInputs(name) {
-    if (!this.get('openedGuacSession')[name]) {
+  pauseInputs(connectionName) {
+    if (!this.get('openedGuacSession')[connectionName]) {
       return;
     }
-    if (this.get('openedGuacSession')[name].keyboard) {
-      this.get('openedGuacSession')[name].keyboard.reset();
-      this.get('openedGuacSession')[name].keyboard.onkeyup = null;
-      this.get('openedGuacSession')[name].keyboard.onkeydown = null;
-      delete this.get('openedGuacSession')[name].keyboard;
+    if (this.get('openedGuacSession')[connectionName].keyboard) {
+      this.get('openedGuacSession')[connectionName].keyboard.reset();
+      this.get('openedGuacSession')[connectionName].keyboard.onkeyup = null;
+      this.get('openedGuacSession')[connectionName].keyboard.onkeydown = null;
+      delete this.get('openedGuacSession')[connectionName].keyboard;
     }
   },
 
-  restoreInputs(name) {
-    if (this.get('openedGuacSession')[name]) {
-      this.keyboardAttach(name);
+  restoreInputs(connectionName) {
+    if (this.get('openedGuacSession')[connectionName]) {
+      this.keyboardAttach(connectionName);
     }
   },
 
-  setCloudClipboard(name, content) {
+  setCloudClipboard(connectionName, content) {
 
-    if (this.get('openedGuacSession')[name]) {
-      this.set('openedGuacSession.' + name + '.cloudClipboard', content);
-      this.get('openedGuacSession')[name].guac.setClipboard(content);
+    if (this.get('openedGuacSession')[connectionName]) {
+      this.set('openedGuacSession.' + connectionName + '.cloudClipboard', content);
+      this.get('openedGuacSession')[connectionName].guacamole.setClipboard(content);
     }
   },
 
-  setLocalClipboard(name, content) {
+  setLocalClipboard(connectionName, content) {
 
-    if (this.get('openedGuacSession')[name]) {
+    if (this.get('openedGuacSession')[connectionName]) {
       this.copyTextToClipboard(content);
-      this.set('openedGuacSession.' + name + '.localClipboard', content);
+      this.set('openedGuacSession.' + connectionName + '.localClipboard', content);
     }
   },
 
-  getCloudClipboard(name) {
-    if (this.get('openedGuacSession')[name]) {
-      return this.get('openedGuacSession')[name].cloudClipboard;
-    }
-    return '';
-  },
-
-  getLocalClipboard(name) {
-    if (this.get('openedGuacSession')[name]) {
-      return this.get('openedGuacSession')[name].localClipboard;
-    }
-    return '';
-  },
-
-  disconnectSession(name) {
-    this.pauseInputs(name);
-    if (this.get('openedGuacSession')[name]) {
-      this.get('openedGuacSession')[name].guac.disconnect();
-      delete this.get('openedGuacSession')[name];
+  disconnectSession(connectionName) {
+    this.pauseInputs(connectionName);
+    if (this.get('openedGuacSession')[connectionName]) {
+      this.get('openedGuacSession')[connectionName].guacamole.disconnect();
+      delete this.get('openedGuacSession')[connectionName];
     }
   },
 
@@ -190,4 +185,111 @@ export default Ember.Service.extend(Ember.Evented, {
       this.trigger('connected');
     }
   },
+
+  startConnection(connectionName) {
+
+    if (Ember.isEmpty(connectionName)) {
+      console.log('no connection name');
+      return ;
+    }
+
+    let width = this.get('width');
+    let height = this.get('height');
+    let guacSession = this.getSession(connectionName, width, height);
+
+    return guacSession.then((guacData) => {
+      guacData.tunnel.onerror = function(status) {
+        this.get('vdiContainer').removeChild(guacData.guacamole.getDisplay().getElement());
+        var message = 'Opening a WebSocketTunnel has failed';
+        var code = getKeyFromVal(Guacamole.Status.Code, status.code);
+        if (code !== -1) {
+          message += ' - ' + code;
+        }
+        this.stateChanged(this.get('remoteSession.STATE_DISCONNECTED'), true, message);
+        this.disconnectSession(this.get('connectionName'));
+      }.bind(this);
+      let guac = guacData.guacamole;
+
+      guac.onfile = function(stream, mimetype, filename) {
+        let blob_reader = new Guacamole.BlobReader(stream, mimetype);
+
+        blob_reader.onprogress = function() {
+          stream.sendAck('Received', Guacamole.Status.Code.SUCCESS);
+        }.bind(this);
+
+        blob_reader.onend = function() {
+          //Download file in browser
+          var element = document.createElement('a');
+          element.setAttribute('href', window.URL.createObjectURL(blob_reader.getBlob()));
+          element.setAttribute('download', filename);
+          element.style.display = 'none';
+          document.body.appendChild(element);
+
+          element.click();
+
+          document.body.removeChild(element);
+        }.bind(this);
+
+        stream.sendAck('Ready', Guacamole.Status.Code.SUCCESS);
+      }.bind(this);
+
+      guac.onstatechange = (state) => {
+        this.stateChanged(state);
+      };
+
+      guac.onclipboard = function(stream, mimetype) {
+
+        let blob_reader = new Guacamole.BlobReader(stream, mimetype);
+        blob_reader.onprogress = function() {
+          stream.sendAck('Received', Guacamole.Status.Code.SUCCESS);
+        }.bind(this);
+
+        blob_reader.onend = function() {
+          var arrayBuffer;
+          var fileReader = new FileReader();
+          fileReader.onload = function(e) {
+            arrayBuffer = e.target.result;
+            this.setCloudClipboard(this.get('connectionName'), arrayBuffer);
+            if (navigator.userAgent.indexOf('Chrome') !== -1) {
+              window.postMessage({type: 'VDIExperience', value: arrayBuffer}, '*');
+            }
+          }.bind(this);
+          fileReader.readAsText(blob_reader.getBlob());
+        }.bind(this);
+      }.bind(this);
+
+      guac.connect();
+    });
+  },
+
+  attachInputs(connectionName) {
+    let guacSession = this.get('openedGuacSession')[connectionName];
+    this.keyboardAttach(connectionName);
+    let mouse = new window.Guacamole.Mouse(guacSession.guacamole.getDisplay().getElement());
+    let display = guacSession.guacamole.getDisplay();
+    window.onresize = function() {
+      let width = this.get('width');
+      let height = this.get('height');
+      guac.sendSize(width, height);
+    }.bind(this);
+
+    mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function(mouseState) {
+      guacSession.guacamole.sendMouseState(mouseState);
+    }.bind(this);
+
+    display.oncursor = function(canvas, x, y) {
+      display.showCursor(!mouse.setCursor(canvas, x, y));
+    };
+  },
+  
+  switchScreen(connectionName) {
+    let guacSession = this.get('openedGuacSession')[connectionName];
+    if (guacSession) {
+      this.attachInputs(connectionName);
+      this.get('vdiContainer').appendChild(guacSession.guacamole.getDisplay().getElement());
+    }
+    else {
+      console.log('no guac session found');
+    }
+  }
 });

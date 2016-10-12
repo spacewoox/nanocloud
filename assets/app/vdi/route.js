@@ -33,6 +33,7 @@ export default Ember.Route.extend({
     controller.set('app', this.store.findRecord('app', controller.get('connection_name')));
     controller.updateAppStateToRunning();
     controller.setupClipboardObservers();
+    controller.initialize();
   },
 
   afterModel(user) {

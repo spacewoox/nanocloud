@@ -385,6 +385,13 @@ h1 {
   max-width: 200px;
 }
 
+.image-card {
+  .card-title {
+    max-width: 300px;
+    display: inline-block;
+  }
+}
+
 @media (max-width: 991px) {
   .ember-modal-dialog {
     width: 95%;
