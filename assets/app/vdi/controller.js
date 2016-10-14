@@ -48,9 +48,8 @@ export default Ember.Controller.extend(
 
     // state
     logoff: false,
-    
+
     initialize() {
-      console.log('start connection : ' + this.get('connection_name'));
       this.get('remoteSession').startConnection(this.get('connection_name'))
       .then(() => {
         this.get('remoteSession').switchScreen(this.get('connection_name'));

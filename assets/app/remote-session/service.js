@@ -27,6 +27,8 @@ import config from 'nanocloud/config/environment';
 import getKeyFromVal from 'nanocloud/utils/get-key-from-value';
 
 /* global Guacamole */
+/* global $:false */
+
 
 export default Ember.Service.extend(Ember.Evented, {
   STATE_IDLE: 0,
@@ -189,7 +191,6 @@ export default Ember.Service.extend(Ember.Evented, {
   startConnection(connectionName) {
 
     if (Ember.isEmpty(connectionName)) {
-      console.log('no connection name');
       return ;
     }
 
@@ -270,7 +271,7 @@ export default Ember.Service.extend(Ember.Evented, {
     window.onresize = function() {
       let width = this.get('width');
       let height = this.get('height');
-      guac.sendSize(width, height);
+      guacSession.guacamole.sendSize(width, height);
     }.bind(this);
 
     mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function(mouseState) {
@@ -281,15 +282,12 @@ export default Ember.Service.extend(Ember.Evented, {
       display.showCursor(!mouse.setCursor(canvas, x, y));
     };
   },
-  
+
   switchScreen(connectionName) {
     let guacSession = this.get('openedGuacSession')[connectionName];
     if (guacSession) {
       this.attachInputs(connectionName);
       this.get('vdiContainer').appendChild(guacSession.guacamole.getDisplay().getElement());
-    }
-    else {
-      console.log('no guac session found');
     }
   }
 });
