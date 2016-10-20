@@ -1,11 +1,19 @@
+
+<div class="randomize rocket centered fixed noselect">
+</div>
 {{#unless showVdi}}
-  <div class="vdi-load-background centered fixed noselect">
+  <div class="vdi-load-background fixed noselect">
     <div>
       <h2 class='text'>Loading</h2>
       <div class='white '>
         Please wait, we're trying to open a session.
         <p>
-          Status: {{display-guac-status remoteSession.loadState}}<br/>
+          Status:
+          {{#if isUpdatingAppStatus}}
+            Initializing..
+          {{else}}
+            {{display-guac-status remoteSession.loadState}}
+          {{/if}}<br/>
           Waiting for plaza: {{plazaStatus}}<br/>
           <div class='abs'>
             {{#if vdiIsLoadingAndNoError}}
@@ -18,7 +26,7 @@
   </div>
 {{else}}
   {{#if guacError}} 
-    <div class="vdi-load-background centered fixed">
+    <div class="vdi-load-background centered">
       <div>
         <h2>An error occured.</h2>
         <div class='white '>

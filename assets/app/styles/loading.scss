@@ -220,3 +220,25 @@
   animation-duration: 1.3s;
   animation-iteration-count: infinite;
 }
+
+
+@keyframes random {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.randomize {  
+  @extend .transition-enabled;
+  animation-name: random;
+  animation-duration: 0.4s;
+  animation-iteration-count: infinite;
+  transition-timing-function: linear;
+}
+

@@ -41,9 +41,13 @@
   }
 
   .vdi-load-background {
-    top: 0;
     background: #000;
     z-index: 5;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 260px;
+    bottom: 40px;
 
     .text {
       @extend .transition-enabled;
@@ -53,4 +57,14 @@
       animation-iteration-count: infinite;
     }
   }
+}
+
+.rocket {
+  top: 15%;
+  right: 16%;
+  background-image: url('/assets/images/rocket.png');
+  background-repeat: no-repeat;
+  width: 399px;
+  height: 366px;
+  background-size: contain; 
 }
